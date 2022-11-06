@@ -96,7 +96,7 @@ class EmployeeController @Autowired constructor(
     * set new password
     * */
     @GetMapping("/reset-password")
-    fun resetPassword(@RequestParam("email") email: String?, @RequestParam newPassword: String?) : ResponseEntity<HttpResponse> {
+    fun resetPassword(@RequestParam("email") email: String?, @RequestParam("reset-password") newPassword: String?) : ResponseEntity<HttpResponse> {
         employeeService.resetPassword(email, newPassword)
         return response(OK, "password has been changed")
     }

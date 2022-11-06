@@ -1,15 +1,14 @@
 package com.example.userpestcontrol.service.employee
 
-import com.example.userpestcontrol.constant.EmailConstant
 import com.example.userpestcontrol.constant.MessageConstant
 import com.example.userpestcontrol.entity.Employee
 import com.example.userpestcontrol.entity.EmployeePrincipal
-import com.example.userpestcontrol.model.request.RegisterRequest
 import com.example.userpestcontrol.enum.Role
 import com.example.userpestcontrol.exception.domain.EmailExistException
 import com.example.userpestcontrol.exception.domain.EmailNotFoundException
 import com.example.userpestcontrol.exception.domain.IdEmployeeExistException
 import com.example.userpestcontrol.exception.domain.UserNotFoundException
+import com.example.userpestcontrol.model.request.RegisterRequest
 import com.example.userpestcontrol.repository.EmployeeRepository
 import com.example.userpestcontrol.service.EmailService
 import com.mualim.syahrido.userpestcontrol.logger.Logger
@@ -94,11 +93,11 @@ class EmployeeServiceImp @Autowired constructor(
         val employee =
             findUserByEmail(email) ?: throw EmailNotFoundException("${MessageConstant.NO_USER_FOUND_BY_EMAIL} $email")
 
-        employee.password = newPassword
+        employee.password = encodedPassword(newPassword)
         employeeRepository.save(employee)
     }
 
-    private fun encodedPassword(password: String): String {
+    private fun encodedPassword(password: String?): String {
         return bCryptPasswordEncoder.encode(password)
     }
 

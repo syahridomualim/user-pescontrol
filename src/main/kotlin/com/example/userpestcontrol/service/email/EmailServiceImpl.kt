@@ -36,7 +36,7 @@ class EmailServiceImpl : EmailService {
             setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false))
             setRecipients(Message.RecipientType.CC, InternetAddress.parse(EmailConstant.CC_EMAIL, false))
             subject = EmailConstant.EMAIL_SUBJECT
-            setText("Hello $firstName, \n\n Please click below url to reset your password: $\n\n The Support Team")
+            setText("Hello $firstName, \n\n Please click below url to reset your password:\n\n http://localhost:4200/reset-password The Support Team")
             sentDate = Date()
             saveChanges()
         }
