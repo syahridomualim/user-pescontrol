@@ -1,11 +1,8 @@
 package com.example.userpestcontrol.exception
 
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.example.userpestcontrol.domain.response.HttpResponse
-import com.example.userpestcontrol.exception.domain.EmailExistException
-import com.example.userpestcontrol.exception.domain.EmailNotFoundException
-import com.example.userpestcontrol.exception.domain.IdEmployeeExistException
-import com.example.userpestcontrol.exception.domain.UserNotFoundException
+import com.example.userpestcontrol.exception.domain.*
+import com.example.userpestcontrol.model.response.HttpResponse
 import com.example.userpestcontrol.utility.createHttpResponse
 import com.mualim.syahrido.userpestcontrol.logger.Logger
 import org.springframework.boot.web.servlet.error.ErrorController
@@ -76,10 +73,20 @@ class ExceptionHandling : ErrorController {
         return createHttpResponse(HttpStatus.BAD_REQUEST, exception.message)
     }
 
-//    @ExceptionHandler(NoHandlerFoundException::class)
-//    fun noHandlerFoundException(exception: NoHandlerFoundException) : ResponseEntity<HttpResponse> {
-//        return createHttpResponse(HttpStatus.BAD_REQUEST, "There is no mapping for this URL")
-//    }
+    @ExceptionHandler(AreaExistException::class)
+    fun areaExistException(exception: AreaExistException): ResponseEntity<HttpResponse> {
+        return createHttpResponse(HttpStatus.BAD_REQUEST, exception.message)
+    }
+
+    @ExceptionHandler(DepartmentExistException::class)
+    fun departmentExistException(exception: DepartmentExistException): ResponseEntity<HttpResponse> {
+        return createHttpResponse(HttpStatus.BAD_REQUEST, exception.message)
+    }
+
+    @ExceptionHandler(CheckedInException::class)
+    fun checkInException(exception: CheckedInException): ResponseEntity<HttpResponse> {
+        return createHttpResponse(HttpStatus.OK, exception.message)
+    }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun methodNotSupportedException(exception: HttpRequestMethodNotSupportedException): ResponseEntity<HttpResponse> {

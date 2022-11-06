@@ -1,7 +1,7 @@
 package com.example.userpestcontrol.filter
 
 import com.example.userpestcontrol.constant.SecurityConstant
-import com.example.userpestcontrol.domain.response.HttpResponse
+import com.example.userpestcontrol.model.response.HttpResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.MediaType

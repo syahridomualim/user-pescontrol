@@ -1,4 +1,4 @@
-package com.example.userpestcontrol.domain.form
+package com.example.userpestcontrol.model.form
 
 data class AreaToEmployeeForm(
     val idEmployee: Long,

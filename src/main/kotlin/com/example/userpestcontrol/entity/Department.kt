@@ -1,33 +1,31 @@
-package com.example.userpestcontrol.domain
+package com.example.userpestcontrol.entity
 
 import org.hibernate.Hibernate
-import org.hibernate.annotations.Tables
 import java.io.Serializable
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType.AUTO
 import javax.persistence.Id
 
-@Entity(name = "area")
-data class Area(
+@Entity(name = "department")
+data class Department(
     @Id
     @GeneratedValue(strategy = AUTO)
-    val idArea: Long,
-    val name: String,
-    val location: String,
+    val idDepartment: Long,
+    val name: String
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Area
+        other as Department
 
-        return idArea == other.idArea
+        return idDepartment == other.idDepartment
     }
 
     override fun hashCode(): Int = javaClass.hashCode()
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(idArea = $idArea )"
+        return this::class.simpleName + "(idDepartment = $idDepartment )"
     }
 }

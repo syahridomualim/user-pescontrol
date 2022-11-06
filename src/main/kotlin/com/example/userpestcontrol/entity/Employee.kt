@@ -1,4 +1,4 @@
-package com.example.userpestcontrol.domain
+package com.example.userpestcontrol.entity
 
 import org.hibernate.Hibernate
 import java.io.Serializable
@@ -10,28 +10,32 @@ data class Employee(
     @Id
     @GeneratedValue(strategy = AUTO)
     val id: Long? = null,
+
+    @Column(name = "id_employee")
     val idEmployee: Long,
+    @Column(name = "first_name")
     var firstName: String?,
     var lastName: String?,
     var password: String?,
     var email: String?,
-    var profileImageUrl: String? = null,
+    var profileImageUrl: String?,
     var activeDate: Long?,
     var role: String?,
-    var authorities: Array<out String>? = null,
+    var authorities: Array<out String>?,
     var lastLoginDate: Long? = null,
     var lastLoginDisplayDate: Long? = null,
     var isActive: Boolean = true,
     var isNotLocked: Boolean = true,
 
     @OneToOne
-    @JoinColumn(name = "area", referencedColumnName = "name")
+    @JoinColumn(name = "area", referencedColumnName = "name", nullable = true)
     var area: Area? = null,
 
     @OneToOne
-    @JoinColumn(name = "department", referencedColumnName = "name")
+    @JoinColumn(name = "department", referencedColumnName = "name", nullable = true)
     var department: Department? = null,
-) : Serializable {
+
+    ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false

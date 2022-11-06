@@ -2,7 +2,7 @@ package com.example.userpestcontrol.constant
 
 object SecurityConstant {
 
-    const val EXPIRATION_TIME = 432_00_000L // 5 days expressed in milliseconds
+    const val EXPIRATION_TIME = 432_000_000L // 5 days expressed in milliseconds
     const val TOKEN_PREFIX = "Bearer "
     const val JWT_TOKEN_HEADER = "Jwt-Token"
     const val TOKEN_CANNOT_BE_VERIFIED = "Token cannot be verified"

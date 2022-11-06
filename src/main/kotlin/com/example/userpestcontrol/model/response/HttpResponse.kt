@@ -1,4 +1,4 @@
-package com.example.userpestcontrol.domain.response
+package com.example.userpestcontrol.model.response
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty

@@ -1,6 +1,5 @@
-package com.example.userpestcontrol.domain
+package com.example.userpestcontrol.entity
 
-import com.example.userpestcontrol.domain.Employee
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

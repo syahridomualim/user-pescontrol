@@ -1,6 +1,6 @@
 package com.example.userpestcontrol.utility
 
-import com.example.userpestcontrol.domain.response.HttpResponse
+import com.example.userpestcontrol.model.response.HttpResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 

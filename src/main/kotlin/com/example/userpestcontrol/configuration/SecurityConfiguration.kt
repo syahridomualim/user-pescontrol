@@ -41,7 +41,8 @@ class SecurityConfiguration @Autowired constructor(
                 .and().authorizeRequests()
                 .antMatchers("/employee/login",
                     "/employee/register",
-                    "/employee/resetpassword/**",
+                    "/employee/reset-password/**",
+                    "/employee/send-link/**",
                     "/employee/image/**").permitAll()
 //                .antMatchers("**").permitAll()
                 .anyRequest().authenticated().and()
