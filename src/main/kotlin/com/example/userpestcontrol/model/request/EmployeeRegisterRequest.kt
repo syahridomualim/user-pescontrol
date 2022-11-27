@@ -1,11 +1,12 @@
 package com.example.userpestcontrol.model.request
 
-import org.springframework.validation.annotation.Validated
+import com.example.userpestcontrol.entity.Area
 
-data class RegisterRequest(
+data class EmployeeRegisterRequest(
     val idEmployee: Long,
     val firstName: String,
     val lastName: String,
     val email: String,
-    val password: String
+    val password: String,
+    val area: Area
 )

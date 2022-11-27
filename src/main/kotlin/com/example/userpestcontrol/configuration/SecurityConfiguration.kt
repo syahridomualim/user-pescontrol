@@ -40,7 +40,7 @@ class SecurityConfiguration @Autowired constructor(
             csrf().disable().cors().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
                 .antMatchers("/employee/login",
-                    "/employee/register",
+                    "/employee/register-coordinator",
                     "/employee/reset-password/**",
                     "/employee/send-link/**",
                     "/employee/image/**").permitAll()

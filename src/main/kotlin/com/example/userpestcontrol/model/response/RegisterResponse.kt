@@ -4,5 +4,6 @@ data class RegisterResponse(
     val idEmployee: Long?,
     val name: String?,
     val email: String?,
-    var activeDate: Long?
+    val activeDate: Long?,
+    val role: String?
 )

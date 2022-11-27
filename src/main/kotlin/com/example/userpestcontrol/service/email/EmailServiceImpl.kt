@@ -1,7 +1,6 @@
 package com.example.userpestcontrol.service.email
 
 import com.example.userpestcontrol.constant.EmailConstant
-import com.example.userpestcontrol.service.EmailService
 import com.sun.mail.smtp.SMTPTransport
 import org.springframework.stereotype.Service
 import java.util.*

@@ -3,13 +3,14 @@ package com.example.userpestcontrol.controller
 import com.example.userpestcontrol.constant.SecurityConstant.JWT_TOKEN_HEADER
 import com.example.userpestcontrol.entity.Employee
 import com.example.userpestcontrol.entity.EmployeePrincipal
+import com.example.userpestcontrol.exception.ExceptionHandling
+import com.example.userpestcontrol.model.request.CoordinatorRegisterRequest
+import com.example.userpestcontrol.model.request.EmployeeRegisterRequest
 import com.example.userpestcontrol.model.request.LoginRequest
-import com.example.userpestcontrol.model.request.RegisterRequest
 import com.example.userpestcontrol.model.response.EmployeeResponse
+import com.example.userpestcontrol.model.response.HttpResponse
 import com.example.userpestcontrol.model.response.LoginResponse
 import com.example.userpestcontrol.model.response.RegisterResponse
-import com.example.userpestcontrol.exception.ExceptionHandling
-import com.example.userpestcontrol.model.response.HttpResponse
 import com.example.userpestcontrol.service.employee.EmployeeService
 import com.example.userpestcontrol.utility.TokenProvider
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,19 +30,28 @@ class EmployeeController @Autowired constructor(
     private val tokenProvider: TokenProvider,
 ) : ExceptionHandling() {
 
-    @PostMapping("/register")
-    fun register(@RequestBody registerRequest: RegisterRequest): ResponseEntity<RegisterResponse> {
-        val newEmployee = employeeService.register(registerRequest)
+    /*
+    * author: mualim
+    * date: 13/11/2022
+    * this method is invoked to register new employee
+    * */
+    @PostMapping("/register-employee")
+    fun registerEmployee(@RequestBody employeeRegisterRequest: EmployeeRegisterRequest): ResponseEntity<RegisterResponse> {
+        val newEmployee = employeeService.registerEmployee(employeeRegisterRequest)
 
-        val registerResponse =
-            RegisterResponse(
-                idEmployee = newEmployee?.idEmployee,
-                name = "${newEmployee?.firstName} ${newEmployee?.lastName}",
-                email = newEmployee?.email,
-                activeDate = newEmployee?.activeDate
-            )
+        return ResponseEntity(convertToRegisterResponse(newEmployee), OK)
+    }
 
-        return ResponseEntity(registerResponse, OK)
+    /*
+    * author: mualim
+    * date: 13/11/2022
+    * this method is invoked to register new coordinator
+    * */
+    @PostMapping("/register-coordinator")
+    fun registerCoordinator(@RequestBody coordinatorRegisterRequest: CoordinatorRegisterRequest): ResponseEntity<RegisterResponse> {
+        val newCoordinator = employeeService.registerCoordinator(coordinatorRegisterRequest)
+
+        return ResponseEntity(convertToRegisterResponse(newCoordinator), OK)
     }
 
     @PostMapping("/login")
@@ -63,10 +73,13 @@ class EmployeeController @Autowired constructor(
         return ResponseEntity(loginResponse, jwtHeader, OK)
     }
 
+    /*
+    * author mualim
+    * invoke all employees
+    * */
     @GetMapping("/employees")
     fun getEmployees(): ResponseEntity<List<EmployeeResponse>> {
         val employees = employeeService.getEmployees()
-
 
         val employeesResponse = employees?.map {
             convertToEmployeeResponse(it)
@@ -89,17 +102,21 @@ class EmployeeController @Autowired constructor(
     @GetMapping("/send-link")
     fun sendLink(@RequestParam("email") email: String?): ResponseEntity<HttpResponse> {
         employeeService.sendLink(email)
-        return response(OK, "Please check email to reset your password")
+        return OK.response("Please check email to reset your password")
     }
 
     /*
     * set new password
     * */
     @GetMapping("/reset-password")
-    fun resetPassword(@RequestParam("email") email: String?, @RequestParam("reset-password") newPassword: String?) : ResponseEntity<HttpResponse> {
+    fun resetPassword(
+        @RequestParam("email") email: String?,
+        @RequestParam("reset-password") newPassword: String?
+    ): ResponseEntity<HttpResponse> {
         employeeService.resetPassword(email, newPassword)
-        return response(OK, "password has been changed")
+        return OK.response("password has been changed")
     }
+
 
     private fun authenticate(email: String, password: String) {
         authenticationManager.authenticate(UsernamePasswordAuthenticationToken(email, password))
@@ -129,13 +146,23 @@ class EmployeeController @Autowired constructor(
         )
     }
 
-    private fun response(httpStatus: HttpStatus, message: String): ResponseEntity<HttpResponse> {
+    private fun HttpStatus.response(message: String): ResponseEntity<HttpResponse> {
         val body = HttpResponse(
-            httpStatus = HttpStatus.OK,
+            httpStatus = OK,
             httpStatusCode = OK.value(),
             reason = OK.reasonPhrase,
             message = message
         )
-        return ResponseEntity(body, httpStatus)
+        return ResponseEntity(body, this)
+    }
+
+    private fun convertToRegisterResponse(employee: Employee?): RegisterResponse {
+        return RegisterResponse(
+            idEmployee = employee?.idEmployee,
+            name = "${employee?.firstName} ${employee?.lastName}",
+            email = employee?.email,
+            activeDate = employee?.activeDate,
+            role = employee?.role
+        )
     }
 }

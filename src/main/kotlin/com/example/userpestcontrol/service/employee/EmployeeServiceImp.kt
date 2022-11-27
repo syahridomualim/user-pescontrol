@@ -1,6 +1,8 @@
 package com.example.userpestcontrol.service.employee
 
 import com.example.userpestcontrol.constant.MessageConstant
+import com.example.userpestcontrol.entity.Area
+import com.example.userpestcontrol.entity.Department
 import com.example.userpestcontrol.entity.Employee
 import com.example.userpestcontrol.entity.EmployeePrincipal
 import com.example.userpestcontrol.enum.Role
@@ -8,9 +10,10 @@ import com.example.userpestcontrol.exception.domain.EmailExistException
 import com.example.userpestcontrol.exception.domain.EmailNotFoundException
 import com.example.userpestcontrol.exception.domain.IdEmployeeExistException
 import com.example.userpestcontrol.exception.domain.UserNotFoundException
-import com.example.userpestcontrol.model.request.RegisterRequest
+import com.example.userpestcontrol.model.request.CoordinatorRegisterRequest
+import com.example.userpestcontrol.model.request.EmployeeRegisterRequest
 import com.example.userpestcontrol.repository.EmployeeRepository
-import com.example.userpestcontrol.service.EmailService
+import com.example.userpestcontrol.service.email.EmailService
 import com.mualim.syahrido.userpestcontrol.logger.Logger
 import org.apache.commons.lang3.StringUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,18 +53,20 @@ class EmployeeServiceImp @Autowired constructor(
         }
     }
 
-    override fun register(registerRequest: RegisterRequest): Employee? {
-        validateNewUsernameAndEmail(StringUtils.EMPTY, registerRequest.email, registerRequest.idEmployee)
+    override fun registerEmployee(employeeRegisterRequest: EmployeeRegisterRequest): Employee? {
+        validateNewUsernameAndEmail(StringUtils.EMPTY, employeeRegisterRequest.email, employeeRegisterRequest.idEmployee)
         val employee = Employee(
-            idEmployee = registerRequest.idEmployee,
-            firstName = registerRequest.firstName,
-            lastName = registerRequest.lastName,
-            email = registerRequest.email,
-            password = encodedPassword(registerRequest.password),
+            idEmployee = employeeRegisterRequest.idEmployee,
+            firstName = employeeRegisterRequest.firstName,
+            lastName = employeeRegisterRequest.lastName,
+            email = employeeRegisterRequest.email,
+            password = encodedPassword(employeeRegisterRequest.password),
             activeDate = Date().time,
             role = Role.ROLE_USER.name,
             authorities = Role.ROLE_USER.getAuthorities(),
-            profileImageUrl = null
+            profileImageUrl = null,
+            department = Department(1, "Pest Control"),
+            area = employeeRegisterRequest.area
         )
 
         employeeRepository.save(employee)
@@ -70,15 +75,39 @@ class EmployeeServiceImp @Autowired constructor(
         return employee
     }
 
+    override fun registerCoordinator(coordinatorRegisterRequest: CoordinatorRegisterRequest): Employee? {
+        // validate email or id employee exist or doesnt
+        validateNewUsernameAndEmail(StringUtils.EMPTY, coordinatorRegisterRequest.email, coordinatorRegisterRequest.idEmployee)
+        val employee = Employee(
+            idEmployee = coordinatorRegisterRequest.idEmployee,
+            firstName = coordinatorRegisterRequest.firstName,
+            lastName = coordinatorRegisterRequest.lastName,
+            password = encodedPassword(coordinatorRegisterRequest.password),
+            email = coordinatorRegisterRequest.email,
+            activeDate = Date().time,
+            role = Role.ROLE_COORDINATOR.name,
+            authorities = Role.ROLE_COORDINATOR.getAuthorities(),
+            profileImageUrl = null
+        )
+
+        employeeRepository.save(employee)
+        log.info("created a new coordinator")
+
+        return employee
+    }
+
     override fun findUserByEmail(email: String?): Employee? {
+        log.info("find user by $email")
         return employeeRepository.findUserByEmail(email)
     }
 
     override fun findUserByIdEmployee(idEmployee: Long): Employee? {
+        log.info("find user by $idEmployee")
         return employeeRepository.findUserByIdEmployee(idEmployee)
     }
 
     override fun getEmployees(): List<Employee>? {
+        log.info("find all employees")
         return employeeRepository.findAll()
     }
 
@@ -86,6 +115,7 @@ class EmployeeServiceImp @Autowired constructor(
         val employee =
             findUserByEmail(email) ?: throw EmailNotFoundException("${MessageConstant.NO_USER_FOUND_BY_EMAIL} $email")
 
+        log.info("send link reset password to email user")
         emailService.sendToEmployeeEmail(employee.firstName, email)
     }
 
@@ -94,6 +124,7 @@ class EmployeeServiceImp @Autowired constructor(
             findUserByEmail(email) ?: throw EmailNotFoundException("${MessageConstant.NO_USER_FOUND_BY_EMAIL} $email")
 
         employee.password = encodedPassword(newPassword)
+        log.info("saved new password")
         employeeRepository.save(employee)
     }
 
@@ -101,6 +132,9 @@ class EmployeeServiceImp @Autowired constructor(
         return bCryptPasswordEncoder.encode(password)
     }
 
+    /*
+    * author: this methode to validate
+    * */
     private fun validateNewUsernameAndEmail(
         currentEmail: String?,
         newEmail: String?,

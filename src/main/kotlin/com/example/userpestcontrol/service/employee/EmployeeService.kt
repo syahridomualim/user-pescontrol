@@ -1,11 +1,14 @@
 package com.example.userpestcontrol.service.employee
 
 import com.example.userpestcontrol.entity.Employee
-import com.example.userpestcontrol.model.request.RegisterRequest
+import com.example.userpestcontrol.model.request.CoordinatorRegisterRequest
+import com.example.userpestcontrol.model.request.EmployeeRegisterRequest
 
 interface EmployeeService {
 
-    fun register(registerRequest: RegisterRequest): Employee?
+    fun registerEmployee(employeeRegisterRequest: EmployeeRegisterRequest): Employee?
+
+    fun registerCoordinator(coordinatorRegisterRequest: CoordinatorRegisterRequest): Employee?
 
     fun findUserByEmail(email: String?): Employee?
 

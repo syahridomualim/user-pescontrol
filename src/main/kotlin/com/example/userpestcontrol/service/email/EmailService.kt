@@ -1,4 +1,4 @@
-package com.example.userpestcontrol.service
+package com.example.userpestcontrol.service.email
 
 import com.example.userpestcontrol.constant.EmailConstant
 import com.sun.mail.smtp.SMTPTransport

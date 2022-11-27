@@ -41,8 +41,8 @@ class PresensiController @Autowired constructor(
 
     @GetMapping("/presensi/{idEmployee}")
     fun checkAttendance(@PathVariable idEmployee: Long): ResponseEntity<List<PresensiResponse>> {
-        val presensis = presensiService.findListEmployeeByIdEmployee(idEmployee)!!
-        val presensiResponse = presensis.map {
+        val presensis = presensiService.findListEmployeeByIdEmployee(idEmployee)
+        val presensiResponse = presensis?.map {
             convertToPresensiResponse(it)
         }
 
