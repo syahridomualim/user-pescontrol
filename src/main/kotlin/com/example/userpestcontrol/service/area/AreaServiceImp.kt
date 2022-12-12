@@ -18,7 +18,7 @@ class AreaServiceImp(
 ) : AreaService {
 
     override fun saveArea(area: Area): Area {
-        val currentArea = areaRepository.findByName(area.name)
+        val currentArea = area.name?.let { areaRepository.findByName(it) }
 
         if (currentArea?.name != null) {
             throw AreaExistException("Area already exist")

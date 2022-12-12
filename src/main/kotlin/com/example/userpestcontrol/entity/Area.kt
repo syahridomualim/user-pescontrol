@@ -2,6 +2,7 @@ package com.example.userpestcontrol.entity
 
 import org.hibernate.Hibernate
 import java.io.Serializable
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType.AUTO
@@ -12,8 +13,8 @@ data class Area(
     @Id
     @GeneratedValue(strategy = AUTO)
     val idArea: Long,
-    val name: String,
-    val location: String,
+    val name: String?,
+    val location: String?,
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
